@@ -72,6 +72,8 @@
 
 \section{Forwarding in a Single Switch}
 
+In a single switch we use the hostlist file to set up flows and since the routing is trivial we don't need a fancy routing algorithm. We use the match object to route the packets by IP to the correct port specified in the hostlist file. 
+
 \section{Forwarding in a Binary Tree}
 
 The controller for the binary tree case is almost identical to the Fat-Tree-Like controller, except that links are not chosen randomly because there is only one possible link.
