@@ -74,7 +74,21 @@
 
 \section{Forwarding in a Binary Tree}
 
+The controller for the binary tree case is almost identical to the Fat-Tree-Like controller, except that links are not chosen randomly because there is only one possible link.
+
 \section{Forwarding along the Shortest Path in a Fat-Tree-Like Topology}
+
+The implementation for the controller that deals with Fat-Tree-Like topologies has an initialization phase and several function which are called based on different events. The initialization loads the hostlist.csv file and registers to the following events: ConnectionUp, PacketIn and LinkEvent.
+
+ConnectionUp is called whenever a new switch joins the network and the new connection is added to the list. PacketIn could be used to deal with packets that aren't delivered, however, in the current implementation these packets are dropped. The last event is the LinkEvent, this indicates that there is a new link between switches. The controller removes all existing flows from the switches and calculates the flow entries based on the new network topology. 
+
+The following algorithm will set the flow entries for all switches. It is based on the idea that for each host destination ip, every switch needs to now where to forward a packet for that host.
+So for each host the algorithm performs these steps:
+First the list of switches is copied. During the algorithm, a switch must be in one of the following states: not visited, last visited or finished. At the beginning all switches are marked as not visited except for the switch that is connected to the host. This information is stored in the hostlist.csv file. So for the first switch the flow entry is set to forward all packages with the host ip address as destination address to the host. Additionally, the state of this switch is set to last visited.
+
+Next, based on the adjacency list, each link from a switch which is not visited to a switch which is in the last visited state is added to the list with new links. Then the switches with state last visited are set to finished. Each switch that has a link in the generated list will get a flow entry to forward packets with the destination ip address of the host to the switch that was in the last visited state. Last, these switches are set the last visited. This is repeated until there are no new links. If there is more than one link for a single switch, the link is chosen randomly to balance the system.
+
+With this algorithm, the shortest path based on number of hops is chosen for every possible connection.
 
 
 
