@@ -15,7 +15,7 @@ class RegisterSwitch(object):
         self.connections = set()
         self.hostlist = dict()
         def load_hostlist():
-            f = open("hostlist.csv", "r")
+            f = open("hostlist_fattree.csv", "r")
             for line in f:
                 s = line.split(",")
                 self.hostlist[(s[0], int(s[1]))] = int(s[2])
